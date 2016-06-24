@@ -5,14 +5,12 @@ object MenuOption2 {
 
   def searchOrder(populatedArray: ArrayBuffer[Array[String]]): Array[String] = {
 
-    println("Which order would you like to search for? (Name/ID)")
-    //user input to decide whether to search by customer name or customer ID
-    val userInput = readLine()
+    println("Which order would you like to search for? (Name(N)/ID)")
     //store information for the user they were searching for
     var userFound: Array[String] = new Array[String](8)
 
-    userInput.toLowerCase() match {
-      case "name" => //search by customer name
+    Initialization.userInput().toLowerCase() match {
+      case "name" | "n" => //search by customer name
 
         println("Please enter the name you would like to search for: ")
         //holds name of customer to search for
@@ -46,6 +44,7 @@ object MenuOption2 {
               findOrderByName(populatedArray.tail)
           }
         }
+
         findOrderByName(populatedArray)
 
       case "id" => //search by customer form id
@@ -55,6 +54,7 @@ object MenuOption2 {
         val inputID = readLine()
 
         println("Here is the order form for order of ID: " + inputID.toUpperCase())
+
         //find the order by the customers ID
         def findOrderByID(populatedArray: ArrayBuffer[Array[String]]) {
           //while the CSV is not empty
@@ -81,6 +81,7 @@ object MenuOption2 {
               findOrderByID(populatedArray.tail)
           }
         }
+
         findOrderByID(populatedArray)
     }
     //return customer order information

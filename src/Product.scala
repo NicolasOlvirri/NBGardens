@@ -8,6 +8,7 @@ import scala.collection._
   */
 
 object Product {
+
   //decrements stock
   def decrementStock(userFound: Array[String], stockLevels: mutable.HashMap[String, Int]): Unit = {
 
@@ -67,8 +68,7 @@ object Product {
       //file to rewrite updated stock after a purchase
       val file = new PrintWriter(new File("C:\\Users\\Administrator\\IdeaProjects\\Prog1\\src\\stock.csv"))
 
-      for(item <- stockLevels.keySet){
-        println(item + ": " + stockLevels(item))
+      for (item <- stockLevels.keySet) {
         file.write(item + ": " + stockLevels(item) + "\n")
       }
       file.close()
@@ -76,5 +76,45 @@ object Product {
     else println("We were unable to decrement stock values due to insufficient stock.")
     noStock = false
 
+  }
+
+  def updateStock(stockLevels: mutable.HashMap[String, Int], itemToRemove: ArrayBuffer[String], itemQuantity: ArrayBuffer[Int]): Unit = {
+
+    val file = new PrintWriter(new File("C:\\Users\\Administrator\\IdeaProjects\\Prog1\\src\\stock.csv"))
+
+    def findItemAndRemove(stock: mutable.HashMap[String, Int], itemToRemove: ArrayBuffer[String], itemQuantity: ArrayBuffer[Int]): Unit = {
+
+      //make sure the stock map is not empty
+      if (itemToRemove.nonEmpty) {
+
+        //look for the key the the user would like to update
+        if (stock.contains(itemToRemove.head)) {
+
+          //if the user wants to remove more than there is in stock, print a message
+          if (stock(itemToRemove.head) < itemQuantity.head) {
+            println(s"There is not enough of ${itemToRemove.head} in stock to decrement its value.")
+            findItemAndRemove(stock, itemToRemove.tail, itemQuantity.tail)
+          }
+
+          //otherwise decrement the stock
+          else {
+            //decrement that value by the amount that the customer would like to purchase
+            stock(itemToRemove.head) = stock(itemToRemove.head) - itemQuantity.head
+            findItemAndRemove(stock, itemToRemove.tail, itemQuantity.tail)
+          }
+        }
+
+        else {
+          findItemAndRemove(stock, itemToRemove.tail, itemQuantity.tail)
+        }
+      }
+
+      for ((element, quantity) <- stock) {
+        file.write(element + ": " + stock(element) + "\n")
+      }
+      file.close()
+
+    }
+    findItemAndRemove(stockLevels, itemToRemove, itemQuantity)
   }
 }

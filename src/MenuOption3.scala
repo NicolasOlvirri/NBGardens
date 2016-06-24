@@ -11,11 +11,9 @@ object MenuOption3{
     println("What would you like to update the status to? (Processing / New / Dispatched / Cancelled)")
     println("You may also abbreviate to P / N / D / C respectively: ")
     //ask user what they would like to update the status to
-    val userStatus = readLine()
     var y = 0
-    var decremented: Boolean = false
 
-    userStatus.toLowerCase() match{
+    Initialization.userInput().toLowerCase() match{
       //if user wants to change status to Processing
       case "p" | "processing" =>
         //if the user's status is already processing, they cannot set it to processing again
@@ -26,16 +24,9 @@ object MenuOption3{
         else {
           //NEED TO MODIFY STOCK IMS TO GET RID OF GNOMES THAT ARE IN THIS ORDER FROM THE STOCK LEVELS
           println("Would you like to decrement stock levels now? (Y/N)")
-          //ask if user would like to decrement IMS levels now or during dispatch time
-          val userChoice = readChar()
 
-          if (userChoice == 'Y' || userChoice == 'y') {
-            //if they chose yes, decrement the stock in the CSV file
-            Product.decrementStock(userFound, Initialization.stock())
-            decremented = true
-          }
-
-          else println("We will decrement stock levels at dispatching time.")
+          //decrement stock
+          Product.decrementStock(userFound, Initialization.stock())
 
           //set the customer order form to processing
           userFound(0) = "Processing"
@@ -108,11 +99,6 @@ object MenuOption3{
           val file = new FileWriter(new File("C:\\Users\\Administrator\\IdeaProjects\\Prog1\\src\\test.csv"))
           //set the customer order form to dispatched
           userFound(0) = "Dispatched"
-
-          if (decremented == false) {
-            Product.decrementStock(userFound, Initialization.stock())
-            decremented = true
-          }
 
           for (line <- populatedArray) {
             //rewrite csv with the customer order form status as dispatched

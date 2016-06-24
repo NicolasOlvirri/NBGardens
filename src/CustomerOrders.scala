@@ -7,16 +7,11 @@ object CustomerOrders{
 
   def main(args: Array[String]) {
 
-    //print user menu
-    Initialization.menu()
-    //user input to choose from menu
-    var userInput = readInt()
-
-    while(userInput == 1 || userInput == 2 || userInput == 3 || userInput == 4 || userInput == 5) {
+    while(true) {
       //access CSV file
       val bufferedSource = io.Source.fromFile("C:\\Users\\Administrator\\IdeaProjects\\Prog1\\src\\test.csv")
 
-      userInput match {
+      Initialization.menuChoice() match {
         case 1 => //print out the whole csv
           MenuOption1.printAllOrders(Initialization.populateCSVinArray(bufferedSource))
         case 2 => //search order by name / form ID
@@ -27,12 +22,11 @@ object CustomerOrders{
           MenuOption4.addOrderDelivered()
         case 5 => //print stock levels
           Initialization.printStockLevels(Initialization.stock())
+        case 6 => //decrement stock by given product and given amount
+          MenuOption6.removeItemFromStock(Initialization.stock())
         case default =>
           sys.exit
       }
-
-      Initialization.menu()
-      userInput = readInt()
       bufferedSource.close()
     }
   }

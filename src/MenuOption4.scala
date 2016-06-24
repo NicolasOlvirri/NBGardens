@@ -13,14 +13,14 @@ object MenuOption4{
 
     //add information to variables
     println("Please give the information for the order: ")
-    println("Please enter the suppliers name: ")
+    println("Enter the suppliers name: ")
     val supplierName = readLine()
     //Date should automatically be entered
-    println("Please enter the suppliers address: ")
+    println("Enter the suppliers address: ")
     val address = readLine()
-    println("Please enter the suppliers phone number: ")
+    println("Enter the suppliers phone number: ")
     val paymentInfo = readLine()
-    println("Please enter the product name followed by the quantity: ")
+    println("Enter the product name followed by the quantity: ")
     val productName_Quantity = readLine()
 
     //create array holding all information given
