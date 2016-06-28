@@ -3,7 +3,7 @@ import java.util.Calendar
 import scala.collection.mutable.ArrayBuffer
 import scala.io.StdIn._
 
-object MenuOption4{
+object AddSupplier{
 
   def addOrderDelivered(): Unit ={
 

@@ -1,10 +1,11 @@
+import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
 /**
   * Created by Administrator on 16/06/2016.
   */
 
-object MenuOption1 {
+object PrintCSV {
 
   def printAllOrders(populatedArray: ArrayBuffer[Array[String]]): Unit = {
 
@@ -26,4 +27,15 @@ object MenuOption1 {
       y += 1
     }
   }
+
+  //MENUOPTION 5
+  //too short of code so no need to create another file for it
+  //print current stock levels
+  def printStockLevels(gnomeStock: mutable.HashMap[String, Int]): Unit ={
+    println("Gnome Name: Quantity in Stock")
+    for(element <- gnomeStock.keySet){
+      println(element + ": " + gnomeStock(element))
+    }
+  }
+
 }

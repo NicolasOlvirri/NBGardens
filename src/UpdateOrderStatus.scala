@@ -1,13 +1,12 @@
 import java.io.{File, FileWriter}
 import scala.collection.mutable.ArrayBuffer
-import scala.io.StdIn._
 
-object MenuOption3{
+object UpdateOrderStatus{
 
   def updateStatus(populatedArray: ArrayBuffer[Array[String]]): Unit ={
 
     //ask user to search for customer order they would like to update
-    val userFound = MenuOption2.searchOrder(populatedArray)
+    val userFound = SearchOrderForm.searchOrder(populatedArray)
     println("What would you like to update the status to? (Processing / New / Dispatched / Cancelled)")
     println("You may also abbreviate to P / N / D / C respectively: ")
     //ask user what they would like to update the status to
@@ -23,10 +22,11 @@ object MenuOption3{
 
         else {
           //NEED TO MODIFY STOCK IMS TO GET RID OF GNOMES THAT ARE IN THIS ORDER FROM THE STOCK LEVELS
-          println("Would you like to decrement stock levels now? (Y/N)")
+          println("The stock has been updated.")
 
-          //decrement stock
-          Product.decrementStock(userFound, Initialization.stock())
+          //decrement3
+          // stock
+          UpdateStock.decrementStock(userFound, Initialization.stock())
 
           //set the customer order form to processing
           userFound(0) = "Processing"

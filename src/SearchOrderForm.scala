@@ -1,7 +1,7 @@
 import scala.collection.mutable.ArrayBuffer
 import scala.io.StdIn._
 
-object MenuOption2 {
+object SearchOrderForm {
 
   def searchOrder(populatedArray: ArrayBuffer[Array[String]]): Array[String] = {
 

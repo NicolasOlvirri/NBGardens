@@ -51,15 +51,6 @@ object Initialization{
     gnomeStock
   }
 
-  //MENUOPTION 5
-  //too short of code so no need to create another file for it
-  //print current stock levels
-  def printStockLevels(gnomeStock: mutable.HashMap[String, Int]): Unit ={
-    for(element <- gnomeStock.keySet){
-      println(element + ": " + gnomeStock(element))
-    }
-  }
-
   //ask for user input
   def userInput(): String ={
     val userInput = readLine()
