@@ -1,8 +1,7 @@
+package com.WOTS.system
+
 //Program by Nicolas Olvirri
 //Initially started 13/06/2016
-import com.WOTS.data
-import com.WOTS.system.{Menu, Order, Product}
-
 import scala.language._
 
 object Main{
@@ -15,6 +14,7 @@ object Main{
     while(true) {
 
       Menu.mainMenu() match {
+
         case "1" => //print order details
           Menu.printOrderMenu() match{
             case "1" => //print all orders
@@ -24,9 +24,35 @@ object Main{
               Order.printSingleOrder(Menu.userInput().toUpperCase(), orders)
 
           }
-        case "2" => //search order by name / form ID
-//          SearchOrderForm.searchOrder(Menu.populateCSVinArray())
-//        case 3 => //update status of an order
+
+        case "2" => //update order status
+              orders = Order.updateOrderStatus(orders)
+
+        case "3" => //increment or decrement stock
+          Menu.updateOrderMenu() match {
+            case "1" =>
+              println("Enter product ID to update: ")
+              val productID = Menu.userInput()
+              println("Enter the quantity you would like to add: ")
+              val productQuantity = Menu.userInput().toInt
+              val bool: Boolean = true
+              products = Product.updateStockQuantity(products, productID, productQuantity, bool)
+            case "2" =>
+              println("Enter product ID to update: ")
+              val productID = Menu.userInput()
+              println("Enter the quantity you would like to decrement by: ")
+              val productQuantity = Menu.userInput().toInt
+              val bool: Boolean = false
+              products = Product.updateStockQuantity(products, productID, productQuantity, bool)
+
+          }
+
+        case "4" => //add new stock item
+              products = Product.addNewStock(products)
+
+
+
+
 //          UpdateOrderStatus.updateStatus(Menu.populateCSVinArray())
 //        case 4 => //add supplier delivery
 //          Supplier.addSupplier()
