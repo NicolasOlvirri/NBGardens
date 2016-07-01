@@ -13,6 +13,7 @@ object Staff{
     new Staff("0003", "Noob", "Accounts", "Admin", "Admin")
   )
 
+  //given the ID of a staff member, return true if the member is part of accounts
   def returnRole(staffID: String): Boolean ={
     var isAccountsMem = false
 

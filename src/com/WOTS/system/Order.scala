@@ -14,19 +14,22 @@ case class Order(orderStatus: String, orderID: String, staffID: String, customer
 
 object Order {
 
+  //CSV for customer order forms
   val fileName = "src\\com\\WOTS\\data\\customerOrderForm.csv"
 
-  //populate array with orders
+  //read in customer order forms into an array of objects using the CSV
   def readInOrders(): Array[Order] = {
     val bufferedSource = io.Source.fromFile(fileName)
 
     var orders: Array[Order] = Array.empty
 
+    //split the line to contain information in different variables
     for (line <- bufferedSource.getLines()) {
       var orderLine: Array[OrderLine] = Array.empty
       val orderInformation = line.split(',').map(_.trim)
       val products = orderInformation(7).split('|').map(_.trim)
 
+      //separate the orderlines, which is the product ID and quantity for each item ordered by the customer
       for (productIDAndQuantity <- products){
         val orderDetails = productIDAndQuantity.split(':').map(_.trim)
         orderLine = orderLine :+ new OrderLine(orderDetails(0), orderDetails(1).toInt)
@@ -39,6 +42,7 @@ object Order {
     orders
   }
 
+  //print all the orderlines in an order (prints all products ordered by customer)
   def printAllOrderLines(order: Order): Unit ={
     for (orderLine <- order.orderLine) {
       print(orderLine.productID + ": " + orderLine.quantity + " | ")
@@ -46,6 +50,7 @@ object Order {
     println()
   }
 
+  //print all the details of all customer orders
   def printAllDetails(orders: Array[Order]): Unit ={
 
 
@@ -58,6 +63,7 @@ object Order {
     }
   }
 
+  //print details of a given customer order ID
   def printSingleOrder(orderID: String, orders: Array[Order]): Unit ={
 
     def findOrder(orderID: String, arrayOfOrders: Array[Order]): Unit ={
@@ -80,6 +86,7 @@ object Order {
 
   }
 
+  //search for an order given an ID and return it
   def returnSingleOrder(orderID: String, orders: Array[Order]): Order ={
     def findOrder(orderID: String, orders: Array[Order]): Order ={
       if(orders.isEmpty){
@@ -96,6 +103,7 @@ object Order {
     findOrder(orderID, orders)
   }
 
+  //update the status of an order to either Open, Active, Packaged, or Dispatched
   def updateOrderStatus(orders: Array[Order]): Array[Order] = {
     var newOrders: Array[Order] = Array.empty
     def updateStatus(orderArray: Array[Order], orderID: String, newStatus: String): Array[Order] = {
@@ -113,11 +121,14 @@ object Order {
     val orderID = Menu.userInput().toUpperCase()
     val orderSearchedFor = returnSingleOrder(orderID, orders)
 
+    //if the order was found, make the changes to the status
     if (orderSearchedFor != null) {
       println("Enter the new status of the order: (Open / Active / Packaged / Dispatched)")
       println("You may enter (O / A / P / D) for short: ")
+
       Menu.userInput().toLowerCase() match {
         case "o" | "open" =>
+          //make sure the orders status is not already Open
           if (orderSearchedFor.orderStatus == "Open") {
             println(s"The order with ID: $orderID, is already set with status Open")
             orders
@@ -129,25 +140,32 @@ object Order {
           }
 
         case "a" | "active" =>
+          //make sure the orders status is not already Active
           if (orderSearchedFor.orderStatus == "Active") {
             println(s"The order with ID: $orderID, is already set with status Active")
             orders
           }
           else {
+            //enter the staff members ID who will be working on this customer order
             println("Enter your staff ID: ")
             val staffID = Menu.userInput()
 
             for(item <- orderSearchedFor.orderLine) {
+              //update the stock quantity for the given customer orders products
               Product.writeToCSV(Product.updateStockQuantity(Main.products, item.productID, item.quantity, false))
             }
 
+            //update the status
             newOrders = updateStatus(orders, orderID, "Active")
+            //update the staff member to the given members ID
             newOrders = assignStaffToOrder(newOrders, orderID, staffID)
+            //rewrite the changes to the CSV
             writeToCSV(newOrders)
             newOrders
           }
 
         case "p" | "packaged" =>
+          //make sure the orders status is not already Packaged
           if (orderSearchedFor.orderStatus == "Packaged") {
             println(s"The order with ID: $orderID, is already set with status Packaged")
             orders
@@ -159,6 +177,7 @@ object Order {
           }
 
         case "d" | "dispatched" =>
+          //make sure the orders status is not already Dispatched
           if (orderSearchedFor.orderStatus == "Dispatched") {
             println(s"The order with ID: $orderID, is already set with status Dispatched")
             orders
@@ -180,6 +199,7 @@ object Order {
     }
   }
 
+  //assign a staff member to an order
   def assignStaffToOrder(orders: Array[Order], orderID: String, newStaffID: String): Array[Order] ={
     var newOrderArray: Array[Order] = Array.empty
 
@@ -198,6 +218,7 @@ object Order {
     newOrderArray
   }
 
+  //rewrite CSV with given changes
   def writeToCSV(orders: Array[Order]): Unit ={
     def writeOrderLineToCSV(order: Order): String ={
       var orderLineText: String = ""
@@ -216,6 +237,7 @@ object Order {
     writer.close()
   }
 
+  //print all orders which have been set to dispatched
   def printDispatchedOrders(orders: Array[Order]): Array[Order] ={
     var dispatchedOrders: Array[Order] = Array.empty
     for(status <- orders){

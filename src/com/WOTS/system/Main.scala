@@ -6,6 +6,7 @@ import scala.language._
 
 object Main{
 
+  //initialize object arrays by reading in CSVs
   var products: Array[Product] = Product.readInProducts()
   var orders: Array[Order] = Order.readInOrders()
   var purchaseOrders: Array[PurchaseOrder] = PurchaseOrder.readInPurchases()
@@ -14,6 +15,7 @@ object Main{
 
     while(true) {
 
+      //call the main menu
       Menu.mainMenu() match {
 
         case "1" => //print order details
@@ -35,16 +37,22 @@ object Main{
             case "1" =>
               println("Enter product ID to update: ")
               val productID = Menu.userInput()
+
               println("Enter the quantity you would like to add: ")
               val productQuantity = Menu.userInput().toInt
+              //if this boolean is true, increment stock
               val bool: Boolean = true
+
               products = Product.updateStockQuantity(products, productID, productQuantity, bool)
             case "2" =>
               println("Enter product ID to update: ")
               val productID = Menu.userInput()
+
               println("Enter the quantity you would like to decrement by: ")
               val productQuantity = Menu.userInput().toInt
+              //if this boolean is false, decrement stock
               val bool: Boolean = false
+
               products = Product.updateStockQuantity(products, productID, productQuantity, bool)
 
           }
@@ -55,6 +63,7 @@ object Main{
         case "5" => //print dispatched orders if logged in with accounts
           println("Enter your staff ID: ")
           val staffID = Menu.userInput()
+          //check if staff is part of Accounts
           if(Staff.returnRole(staffID)){
             Order.printDispatchedOrders(orders)
           }
@@ -75,6 +84,7 @@ object Main{
         case "9" => //print all received orders if from accounts
           println("Enter your staff ID: ")
           val staffID = Menu.userInput()
+          //check if staff is part of Accounts
           if(Staff.returnRole(staffID)){
             PurchaseOrder.printAllDetails(PurchaseOrder.returnAllReceivedOrders(purchaseOrders))
           }
