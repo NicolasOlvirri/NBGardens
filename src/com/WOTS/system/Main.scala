@@ -8,6 +8,7 @@ object Main{
 
   var products: Array[Product] = Product.readInProducts()
   var orders: Array[Order] = Order.readInOrders()
+  var purchaseOrders: Array[PurchaseOrder] = PurchaseOrder.readInPurchases()
 
   def main(args: Array[String]) {
 
@@ -27,6 +28,7 @@ object Main{
 
         case "2" => //update order status
               orders = Order.updateOrderStatus(orders)
+              products = Product.readInProducts()
 
         case "3" => //increment or decrement stock
           Menu.updateOrderMenu() match {
@@ -50,22 +52,40 @@ object Main{
         case "4" => //add new stock item
               products = Product.addNewStock(products)
 
+        case "5" => //print dispatched orders if logged in with accounts
+          println("Enter your staff ID: ")
+          val staffID = Menu.userInput()
+          if(Staff.returnRole(staffID)){
+            Order.printDispatchedOrders(orders)
+          }
+          else println("This staff member is not a part of Accounts\n")
 
+        case "6" => //print single product details
+          println("Enter the product ID you would like to search for: ")
+          Product.printSingleProduct(Product.findSingleProduct(Menu.userInput(), products))
 
+        case "7" => //update stock when purchase order received
+          println("Enter the ID of the purchase order: ")
+          purchaseOrders = PurchaseOrder.orderReceived(purchaseOrders, Menu.userInput())
 
-//          UpdateOrderStatus.updateStatus(Menu.populateCSVinArray())
-//        case 4 => //add supplier delivery
-//          Supplier.addSupplier()
-//        case 5 => //print stock levels
-//          PrintCSV.printStockLevels(Menu.stock())
-//        case 6 => //decrement stock by given product and given amount
-//          UpdateStock.removeItemFromStock(Product.readInProducts())
-          //products = Product.updateStockQuantity(products, "dwedw", 3)
+        case "8" => //print purchase order
+          println("Enter the order you would like to print out")
+          println(PurchaseOrder.printSinglePurchaseOrder(purchaseOrders, Menu.userInput()))
+
+        case "9" => //print all received orders if from accounts
+          println("Enter your staff ID: ")
+          val staffID = Menu.userInput()
+          if(Staff.returnRole(staffID)){
+            PurchaseOrder.printAllDetails(PurchaseOrder.returnAllReceivedOrders(purchaseOrders))
+          }
+          else println("This staff member is not a part of Accounts\n")
+
         case "0" =>
           sys.exit
         case _ =>
           println("Invalid input. Please try again.\n")
       }
+
     }
   }
 }

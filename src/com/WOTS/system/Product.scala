@@ -77,7 +77,7 @@ object Product {
 
   def printAllDetails(products: Array[Product]): Unit ={
 
-    println("ProductID  |  ProductName  |  Quantity in Stock  |  Porous  |  Product Location")
+    println("ProductID  |  ProductName  |  Quantity in Stock  |  Product Location")
     for(product <- products) {
       println(product.productID + "   " + product.name + "   " + product.quantity + "   " + product.location)
     }
@@ -95,17 +95,19 @@ object Product {
     writer.close()
   }
 
-  def updateStockQuantity(products: Array[Product], productID: String, quant: Int): Array[Product] ={
+  def updateStockQuantity(products: Array[Product], productID: String, quant: Int, increment: Boolean): Array[Product] ={
 
     val item = findSingleProduct(productID, products)
     var newProductList: Array[Product] = Array.empty
-
     //Product(location: String, productID: String, name: String, quantity: Int)
     def updateStockArray(productArray: Array[Product], product: Product): Array[Product] ={
       if(productArray.isEmpty) {
         productArray
       }
       else if(productArray.head.productID == product.productID){
+        if(increment)
+          updateStockArray(productArray.tail, product) :+ productArray.head.copy(quantity = productArray.head.quantity + quant)
+        else
           updateStockArray(productArray.tail, product) :+ productArray.head.copy(quantity = productArray.head.quantity - quant)
         }
         else {
@@ -114,7 +116,7 @@ object Product {
     }
 
     if(item.location != "ERROR") {
-      if(item.quantity < quant){
+      if(item.quantity < quant) {
         println(s"There is not enough stock for this item. ${item.name}: ${item.quantity}")
       }
       else {
@@ -127,4 +129,33 @@ object Product {
     }
     newProductList
   }
+
+  //location: String, productID: String, name: String, quantity: Int
+  def addNewStock(products: Array[Product]): Array[Product] ={
+
+    var productArray: Array[Product] = products
+
+    println("Enter the name of the product: ")
+    val productName = Menu.userInput()
+
+    println("Enter product ID:")
+    val productID = Menu.userInput()
+
+    println("Enter quantity to add: ")
+    val stockQuantity = Menu.userInput()
+
+    println("Enter the zone which this item will be located in: ")
+    val location = Menu.userInput()
+
+    productArray = productArray :+ new Product(location, productID, productName, stockQuantity.toInt)
+
+    writeToCSV(productArray)
+    productArray
+  }
+
+  def printSingleProduct(product: Product): Unit ={
+    println("ProductID  |  ProductName  |  Quantity in Stock  |  Product Location")
+    println(product.productID + "   " + product.name + "   " + product.quantity + "   " + product.location)
+  }
+
 }

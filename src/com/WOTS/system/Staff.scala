@@ -13,4 +13,27 @@ object Staff{
     new Staff("0003", "Noob", "Accounts", "Admin", "Admin")
   )
 
+  def returnRole(staffID: String): Boolean ={
+    var isAccountsMem = false
+
+    def findStaff(staffArray: Array[Staff]): Boolean ={
+      if(staffArray.isEmpty){}
+
+      if (staffID == staffArray.head.staffID){
+        if(staffArray.head.staffRole == "Accounts"){
+          isAccountsMem = true
+          isAccountsMem
+        }
+        else {
+          isAccountsMem
+        }
+      }
+      else{
+        findStaff(staffArray.tail)
+      }
+
+    }
+    findStaff(staff)
+  }
+
 }

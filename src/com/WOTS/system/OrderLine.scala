@@ -5,6 +5,4 @@ package com.WOTS.system
   */
 case class OrderLine(productID: String, quantity: Int) {}
 
-object OrderLine{
-
-}
+object OrderLine{}
