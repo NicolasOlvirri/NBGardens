@@ -12,7 +12,7 @@ case class Product(location: String, productID: String, name: String, quantity: 
 
 object Product {
   //stock CSV path
-  val fileName = "C:\\Users\\Administrator\\IdeaProjects\\Prog1\\src\\com\\WOTS\\data\\stock.csv"
+  val fileName = "src\\com\\WOTS\\data\\stock.csv"
 
   //reads in stock CSV into an array of products
   def readInProducts(): Array[Product] ={
