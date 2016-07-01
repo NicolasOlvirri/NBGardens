@@ -1,4 +1,2 @@
 # NBGardens
-lel
-NBGardens warehouse customer order form automation
-test change
+This is the CSV version of the Warehouse order tracking system for NBGardens

@@ -20,12 +20,14 @@ object Menu{
     userInput()
   }
 
+  //printing menu
   def printOrderMenu(): String={
     println("1: Print all available orders")
     println("2: Print a single customer order using the orders ID")
     userInput()
   }
 
+  //choose whether to increment or decrement stock
   def updateOrderMenu(): String ={
     println("1: Increment Stock")
     println("2: Decrement Stock")
