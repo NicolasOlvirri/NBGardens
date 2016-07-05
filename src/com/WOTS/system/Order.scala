@@ -2,6 +2,8 @@ package com.WOTS.system
 
 import java.io.{BufferedWriter, File, FileWriter}
 
+import scala.collection.mutable.ListBuffer
+
 /**
   * Created by Administrator on 28/06/2016.
   * var orderLines:Array[com.WOTS.system.OrderLine] = Array.Empty
@@ -52,8 +54,6 @@ object Order {
 
   //print all the details of all customer orders
   def printAllDetails(orders: Array[Order]): Unit ={
-
-
     for(order <- orders) {
       println("Order Status  |  Order ID  |  Staff ID  |  Customer Name  |  Order Date  |  Address  |  Payment Method")
       println(order.orderStatus + "  |  " + order.orderID + "  |  " + order.staffID + "  |  " + order.customerName + "  |  " + order.orderDate + "  |  " + order.address + "  |  " + order.paymentMethod)
@@ -62,6 +62,7 @@ object Order {
       println()
     }
   }
+
 
   //print details of a given customer order ID
   def printSingleOrder(orderID: String, orders: Array[Order]): Unit ={
@@ -83,7 +84,6 @@ object Order {
       }
     }
     findOrder(orderID, orders)
-
   }
 
   //search for an order given an ID and return it
@@ -106,17 +106,7 @@ object Order {
   //update the status of an order to either Open, Active, Packaged, or Dispatched
   def updateOrderStatus(orders: Array[Order]): Array[Order] = {
     var newOrders: Array[Order] = Array.empty
-    def updateStatus(orderArray: Array[Order], orderID: String, newStatus: String): Array[Order] = {
-      if (orderArray.isEmpty) {
-        orderArray
-      }
-      else if (orderArray.head.orderID == orderID) {
-        updateStatus(orderArray.tail, orderID, newStatus) :+ orderArray.head.copy(orderStatus = newStatus)
-      }
-      else {
-        updateStatus(orderArray.tail, orderID, newStatus) :+ orderArray.head
-      }
-    }
+
     println("Enter the orders ID to change the status: ")
     val orderID = Menu.userInput().toUpperCase()
     val orderSearchedFor = returnSingleOrder(orderID, orders)
@@ -148,7 +138,8 @@ object Order {
           else {
             //enter the staff members ID who will be working on this customer order
             println("Enter your staff ID: ")
-            val staffID = Menu.userInput()
+            //val staffID = Menu.userInput()
+            val staffID = "0001"
 
             for(item <- orderSearchedFor.orderLine) {
               //update the stock quantity for the given customer orders products
@@ -196,6 +187,20 @@ object Order {
     else {
       println("Order not found")
       orders
+    }
+  }
+
+  def updateStatus(orderArray: Array[Order], orderID: String, newStatus: String): Array[Order] = {
+    if (orderArray.isEmpty) {
+      orderArray
+    }
+    else if (orderArray.head.orderID == orderID) {
+      val newOrders: Array[Order] = updateStatus(orderArray.tail, orderID, newStatus) :+ orderArray.head.copy(orderStatus = newStatus)
+      writeToCSV(newOrders)
+      newOrders
+    }
+    else {
+      updateStatus(orderArray.tail, orderID, newStatus) :+ orderArray.head
     }
   }
 
