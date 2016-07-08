@@ -138,8 +138,7 @@ object Order {
           else {
             //enter the staff members ID who will be working on this customer order
             println("Enter your staff ID: ")
-            //val staffID = Menu.userInput()
-            val staffID = "0001"
+            val staffID = Menu.userInput()
 
             for(item <- orderSearchedFor.orderLine) {
               //update the stock quantity for the given customer orders products

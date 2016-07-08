@@ -7,6 +7,7 @@ import scalafx.scene.Scene
 import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.control._
 import scalafx.scene.layout.{HBox, VBox}
+import scalafx.Includes._
 
 /**
   * Created by Yuan on 07/07/2016.

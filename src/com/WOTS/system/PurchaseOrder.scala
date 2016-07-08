@@ -68,8 +68,11 @@ object PurchaseOrder{
     //if a purchase order was not already received, then you can increment the stock levels of the given stock
     if(isReceived){
       for(item <- orderSearchedFor.orderLine) {
-        Product.writeToCSV(Product.updateStockQuantity(Main.products, item.productID, item.quantity, true))
+        Product.writeToCSV(Product.updateStockQuantity(Main.products, item.productID, item.quantity, isReceived))
       }
+    }
+    else{
+
     }
     //rewrite results to new CSV
     writeToCSV(newPurchaseOrders)
@@ -99,7 +102,7 @@ object PurchaseOrder{
     def writeOrderLineToCSV(order: PurchaseOrder): String ={
       var orderLineText: String = ""
       for(orderLine <- order.orderLine) {
-        orderLineText = orderLine.productID + ": " + orderLine.quantity + " | "
+        orderLineText += orderLine.productID + ": " + orderLine.quantity + " | "
       }
       orderLineText
     }

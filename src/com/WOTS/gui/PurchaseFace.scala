@@ -1,11 +1,13 @@
 package com.WOTS.gui
 
 import com.WOTS.gui
+import com.WOTS.system.{Menu, _}
 
 import scalafx.Includes._
 import scalafx.event._
 import scalafx.geometry.{Orientation, Pos}
 import scalafx.scene.Scene
+import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.control._
 import scalafx.scene.layout.HBox
 /**
@@ -19,67 +21,13 @@ case class PurchaseFace() extends Scene {
   val menuButton = new gui.MenuButton()
   val menu = menuButton.menu
 
-//  val Set = new Button("Set") //a button
-//  Set.minWidth = 90
-//  Set.minHeight = 90
-//  Set.onAction = (e: ActionEvent) => {
-//    val id = text.text.apply().toString
-//    val qty = textQ.text.apply().toInt
-//    var products: Array[Product] = Product.readInProducts()
-//    if(id == "" || qty == ""){
-//      new Alert(AlertType.Error) {
-//        title = "Error Message"
-//        headerText = "Incorrect input!"
-//        contentText = "Please type the correct productId/Qty"
-//      }.showAndWait()
-//    }
-//    else{
-//      if(toggleForP.selectedToggle.apply().getUserData.toString=="Increment"){
-//        val bool: Boolean = true
-//        products = Product.updateStockQuantity(products, id, qty, bool)
-//        com.WOTS.gui.getStockData.com.WOTS.gui.getStockData(products)
-//      }
-//      if(toggleForP.selectedToggle.apply().getUserData.toString=="Decrement"){
-//        val bool: Boolean = false
-//        products = Product.updateStockQuantity(products, id, qty, bool)
-//        com.WOTS.gui.getStockData.com.WOTS.gui.getStockData(products)
-//      }
-//    }
-//  }
-
-  val choose5 = new RadioButton("Increment Stock By")
-  choose5.setUserData("Increment")
-  val choose6 = new RadioButton("Decrement Stock")
-  choose6.setUserData("Decrement")
-
-  val toggleForP = new ToggleGroup()
-  toggleForP.toggles = List (choose5,choose6)
-
-  val text = new TextArea() {promptText = "ID"}//a button
-  text.maxWidth = 140
-  text.maxHeight = 20
-
-  val textQ = new TextArea() {promptText = "Number"}//a button
-  textQ.maxWidth = 140
-  textQ.maxHeight = 20
-
-  val textBox = new HBox(10, text, choose5, choose6, textQ)
-  textBox.alignment = Pos.Center
-
   tableP.setProductTable()
 
   var table = tableP.table
 
-  val sph = new SplitPane(){
-    autosize()
-    items.addAll(textBox,table)
-    dividerPositions=(0.10)
-  }
-  sph.setOrientation(Orientation.Vertical)
-
   val spv = new SplitPane(){
     autosize()
-    items.addAll(menu,sph)
+    items.addAll(menu,table)
     dividerPositions=(0.20)
   }
 
@@ -108,11 +56,51 @@ case class PurchaseFace() extends Scene {
   }
 
   menuButton.PurchaseStatus.onAction = (e: ActionEvent) => {
-    MainFace.changeScene(Login2)
+    try{
+      val dialog = new TextInputDialog() {
+        title = "Input"
+        headerText = "Please enter the ID of the purchase order:"
+      }
+      val result = dialog.showAndWait()
+      result match {
+        case Some(id) =>
+          getPurchaseData.purchases = PurchaseOrder.orderReceived(getPurchaseData.purchases, id)
+          getPurchaseData.getPurchaseData(getPurchaseData.purchases)
+        case None     =>
+      }
+    }
+    catch {
+      case e: Exception =>
+        new Alert(AlertType.Error) {
+          title = "Error Message"
+          headerText = "Incorrect user"
+          contentText = "Please check your role"
+        }.showAndWait()
+    }
   }
 
   menuButton.SinglePurchase.onAction = (e: ActionEvent) => {
-    MainFace.changeScene(Login2)
+    try {
+      val dialog = new TextInputDialog() {
+        title = "Input"
+        headerText = "Please enter the ID of the purchase order:"
+      }
+      val result = dialog.showAndWait()
+      result match {
+        case Some(id) =>
+          val purchases: Array[PurchaseOrder] = Array(PurchaseOrder.searchSingleOrder(getPurchaseData.purchases, id))
+          getPurchaseData.getPurchaseData(purchases)
+        case None =>
+      }
+    }
+    catch {
+      case e: Exception =>
+        new Alert(AlertType.Error) {
+          title = "Error Message"
+          headerText = "Incorrect data"
+          contentText = "Please check your product ID"
+        }.showAndWait()
+    }
   }
 
   menuButton.PurchaseOrders.onAction = (e: ActionEvent) => {

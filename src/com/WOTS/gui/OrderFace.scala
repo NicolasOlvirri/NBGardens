@@ -157,7 +157,7 @@ case class OrderFace() extends Scene {
   }
 
   menuButton.ProductLevelManagement.onAction = (e: ActionEvent) => {
-    if(Login.go){
+    if(Login.go || Login2.go){
       MainFace.changeScene(StockFace())
     }else{
       MainFace.changeScene(Login)
@@ -165,7 +165,7 @@ case class OrderFace() extends Scene {
   }
 
   menuButton.InputStock.onAction = (e: ActionEvent) => {
-    if(Login.go){
+    if(Login.go || Login2.go){
       MainFace.changeScene(AddNewStockFace())
     }else{
       MainFace.changeScene(Login)
@@ -173,7 +173,7 @@ case class OrderFace() extends Scene {
   }
 
   menuButton.SingleProduct.onAction = (e: ActionEvent) => {
-    if(Login.go){
+    if(Login.go || Login2.go){
       MainFace.changeScene(StockFace())
     }else{
       MainFace.changeScene(Login)
@@ -203,6 +203,5 @@ case class OrderFace() extends Scene {
       MainFace.changeScene(Login2)
     }
   }
-
   root = spv
 }

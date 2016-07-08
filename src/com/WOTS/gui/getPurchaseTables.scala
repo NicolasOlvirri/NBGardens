@@ -27,9 +27,9 @@ class getPurchaseTables (getPurchaseData: getPurchaseData){
     val col4ForTable = new TableColumn[PurchaseOrder, String]("Supplier")
     col4ForTable.prefWidth=150
     col4ForTable.cellValueFactory = cdf => StringProperty(cdf.value.supplierName)
-    val col5ForTable = new TableColumn[PurchaseOrder, String]("Goods")
+    val col5ForTable = new TableColumn[PurchaseOrder, String]("Product ID : Quantity")
     col5ForTable.prefWidth=150
-    col5ForTable.cellValueFactory = cdf => StringProperty(cdf.value.orderLine.toString)
+    col5ForTable.cellValueFactory = cdf => StringProperty(cdf.value.orderLine.mkString)
 
     tableT.columns ++= List(col1ForTable, col2ForTable, col3ForTable, col4ForTable, col5ForTable)
     table = tableT

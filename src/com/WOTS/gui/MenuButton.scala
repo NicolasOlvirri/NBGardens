@@ -34,7 +34,7 @@ class MenuButton {
   SingleProduct.maxWidth = 140
   SingleProduct.prefHeight = 50
 
-  val PurchaseStatus = new Button("Purchase Status") //a button
+  val PurchaseStatus = new Button("Update a Purchase Status") //a button
   PurchaseStatus.maxWidth = 140
   PurchaseStatus.prefHeight = 50
 

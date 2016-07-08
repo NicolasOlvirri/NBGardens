@@ -36,7 +36,10 @@ class getOrderTables (getOrderData: getOrderData){
     val col7ForTable = new TableColumn[Order, String]("Payment Method")
     col7ForTable.prefWidth=110
     col7ForTable.cellValueFactory = cdf => StringProperty(cdf.value.paymentMethod)
-    tableT.columns ++= List(col1ForTable, col2ForTable, col3ForTable, col4ForTable, col5ForTable, col6ForTable, col7ForTable)
+    val col8ForTable = new TableColumn[Order, String]("Product ID : Quantity")
+    col8ForTable.prefWidth=150
+    col8ForTable.cellValueFactory = cdf => StringProperty(cdf.value.orderLine.mkString)
+    tableT.columns ++= List(col1ForTable, col2ForTable, col3ForTable, col4ForTable, col5ForTable, col6ForTable, col7ForTable, col8ForTable)
     table = tableT
   }
 }
