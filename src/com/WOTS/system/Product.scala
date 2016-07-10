@@ -2,8 +2,6 @@ package com.WOTS.system
 
 import java.io.{BufferedWriter, File, FileWriter}
 
-import scala.reflect.internal.util.Statistics.Quantity
-
 /**
   * Created by Administrator on 28/06/2016.
   */
@@ -121,12 +119,18 @@ object Product {
     }
     //if the product was not found don't make any changes
     if(item.location != "ERROR") {
-      if(item.quantity < quant) {
-        println(s"There is not enough stock for this item. ${item.name}: ${item.quantity}")
-      }
-      else {
+      if (increment) {
         newProductList = updateStockArray(products, item)
         writeToCSV(newProductList)
+      }
+      else {
+        if (item.quantity < quant) {
+          println(s"There is not enough stock for this item. ${item.name}: ${item.quantity}")
+        }
+        else {
+          newProductList = updateStockArray(products, item)
+          writeToCSV(newProductList)
+        }
       }
     }
     else {

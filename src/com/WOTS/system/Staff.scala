@@ -32,7 +32,6 @@ object Staff{
       else{
         findStaff(staffArray.tail)
       }
-
     }
     findStaff(staff)
   }
