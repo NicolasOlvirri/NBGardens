@@ -5,7 +5,6 @@ import org.scalatest.{FlatSpec, Matchers, Tag}
   * Created by Luke on 10/07/2016.
   */
 class ProductTest extends FlatSpec with Matchers {
-
   //Check product array is not empty when reading in data
   it should "read in product data into product array" taggedAs ReadInProductsSuccess in {
     Product.readInProducts().isEmpty shouldEqual false
@@ -16,7 +15,7 @@ class ProductTest extends FlatSpec with Matchers {
     Product.findSingleProduct("3001", Product.readInProducts()).productID shouldEqual "3001"
   }
 
-  //given an incorrect rpoduct ID, return the Product object and ceck it is the incorrect Product by checking the ID
+  //given an incorrect product ID, return the Product object and check it is the incorrect Product by checking the ID
   it should "fail to find product via ID" taggedAs FindProductByIDFailure in {
     Product.findSingleProduct("saadasd", Product.readInProducts()).location shouldEqual "ERROR"
   }
@@ -47,9 +46,6 @@ class ProductTest extends FlatSpec with Matchers {
   it should "fail to decrease the stock of a product, given an incorrect ID" taggedAs UpdateStockQuantityDecreaseFail in {
     Product.updateStockQuantity(Product.readInProducts(), "3001", 999999999, false).isEmpty shouldEqual true
   }
-
-
-
 }
 
 object ReadInProductsSuccess extends Tag("ReadInProductsSuccess")

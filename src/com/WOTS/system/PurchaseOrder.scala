@@ -8,7 +8,7 @@ import java.io.{BufferedWriter, File, FileWriter}
 //create class with information on a purchase order from a supplier
 case class PurchaseOrder(orderID: String, orderStatus: String, orderDate: String, supplierName: String, orderLine: Array[OrderLine]) {}
 
-object PurchaseOrder{
+object PurchaseOrder {
 
   //CSV for purchase orders
   val fileName = "src\\com\\WOTS\\data\\purchaseOrders.csv"
@@ -26,7 +26,7 @@ object PurchaseOrder{
       val products = orderInformation(5).split('|').map(_.trim)
 
       //for the orderlines in a purchase order form, store it into an orderline array
-      for (productIDAndQuantity <- products){
+      for (productIDAndQuantity <- products) {
         val orderDetails = productIDAndQuantity.split(':').map(_.trim)
         orderLine = orderLine :+ new OrderLine(orderDetails(0), orderDetails(1).toInt)
       }
@@ -40,16 +40,16 @@ object PurchaseOrder{
   }
 
   //when a purchase order is received, update the status of the purchase order to received and increment stock levels with new stock
-  def orderReceived(purchaseOrders: Array[PurchaseOrder], orderID: String): Array[PurchaseOrder] ={
+  def orderReceived(purchaseOrders: Array[PurchaseOrder], orderID: String): Array[PurchaseOrder] = {
     var isReceived: Boolean = false
     var newPurchaseOrders: Array[PurchaseOrder] = Array.empty
     val orderSearchedFor = searchSingleOrder(purchaseOrders, orderID)
 
-    def changeOrderStatus(purchaseOrders: Array[PurchaseOrder]): Array[PurchaseOrder] ={
-      if(purchaseOrders.isEmpty){
+    def changeOrderStatus(purchaseOrders: Array[PurchaseOrder]): Array[PurchaseOrder] = {
+      if (purchaseOrders.isEmpty) {
         purchaseOrders
       }
-      else if(purchaseOrders.head.orderID == orderID) {
+      else if (purchaseOrders.head.orderID == orderID) {
         //if the order has already been received do not update orders status
         if (orderSearchedFor.orderStatus == "Received") {
           println("The order has already been set to received.")
@@ -66,12 +66,12 @@ object PurchaseOrder{
     }
     newPurchaseOrders = changeOrderStatus(purchaseOrders)
     //if a purchase order was not already received, then you can increment the stock levels of the given stock
-    if(isReceived){
-      for(item <- orderSearchedFor.orderLine) {
+    if (isReceived) {
+      for (item <- orderSearchedFor.orderLine) {
         Product.writeToCSV(Product.updateStockQuantity(Main.products, item.productID, item.quantity, isReceived))
       }
     }
-    else{
+    else {
 
     }
     //rewrite results to new CSV
@@ -80,14 +80,14 @@ object PurchaseOrder{
   }
 
   //search for a single purchase order form given an ID
-  def searchSingleOrder(purchaseOrders: Array[PurchaseOrder], orderID: String): PurchaseOrder ={
-    def findOrder(orderID: String, purchaseOrder: Array[PurchaseOrder]): PurchaseOrder ={
-      if(purchaseOrder.isEmpty){
+  def searchSingleOrder(purchaseOrders: Array[PurchaseOrder], orderID: String): PurchaseOrder = {
+    def findOrder(orderID: String, purchaseOrder: Array[PurchaseOrder]): PurchaseOrder = {
+      if (purchaseOrder.isEmpty) {
         println(s"Could not find order with ID: $orderID")
         null
       }
-      else{
-        if(orderID == purchaseOrder.head.orderID)
+      else {
+        if (orderID == purchaseOrder.head.orderID)
           purchaseOrder.head
         else
           findOrder(orderID, purchaseOrder.tail)
@@ -97,11 +97,11 @@ object PurchaseOrder{
   }
 
   //rewrite changes made to a CSV
-  def writeToCSV(purchaseOrders: Array[PurchaseOrder]): Unit ={
+  def writeToCSV(purchaseOrders: Array[PurchaseOrder]): Unit = {
     //orderID: String, orderStatus: String, orderDate: String, supplierName: String, orderLines: Array[OrderLine]
-    def writeOrderLineToCSV(order: PurchaseOrder): String ={
+    def writeOrderLineToCSV(order: PurchaseOrder): String = {
       var orderLineText: String = ""
-      for(orderLine <- order.orderLine) {
+      for (orderLine <- order.orderLine) {
         orderLineText += orderLine.productID + ": " + orderLine.quantity + " | "
       }
       orderLineText
@@ -109,7 +109,7 @@ object PurchaseOrder{
     val file = new File(fileName)
     val writer = new BufferedWriter(new FileWriter(file))
     var text = ""
-    for(item <- purchaseOrders){
+    for (item <- purchaseOrders) {
       text = item.orderID + ", " + item.orderStatus + ", " + item.orderDate + ", " + item.supplierName + ", " + item.orderDate + ", " + writeOrderLineToCSV(item) + "\n"
       writer.write(text)
     }
@@ -117,18 +117,22 @@ object PurchaseOrder{
   }
 
   //print out the details given the purchase orders ID
-  def printSinglePurchaseOrder(purchaseOrders: Array[PurchaseOrder], orderID: String): String ={
+  def printSinglePurchaseOrder(purchaseOrders: Array[PurchaseOrder], orderID: String): String = {
 
     val orderSearchedFor: PurchaseOrder = searchSingleOrder(purchaseOrders, orderID)
     var text = ""
 
     println("Purchase Order ID  |  Order Status  |  Order Date  |  Supplier Name  |  Products Ordered")
-    text += orderSearchedFor.orderID + "  |  " + orderSearchedFor.orderStatus + "  |  " + orderSearchedFor.orderDate + "  |  " + orderSearchedFor.supplierName + "  |  " + printAllOrderLines(orderSearchedFor)
+    if (orderSearchedFor != null) {
+      text += orderSearchedFor.orderID + "  |  " + orderSearchedFor.orderStatus + "  |  " + orderSearchedFor.orderDate + "  |  " + orderSearchedFor.supplierName + "  |  " + printAllOrderLines(orderSearchedFor)
+    } else {
+      text = "ERROR"
+    }
     text
   }
 
   //print out all products purchased listed on the purchase order
-  def printAllOrderLines(purchaseOrder: PurchaseOrder): String ={
+  def printAllOrderLines(purchaseOrder: PurchaseOrder): String = {
     var text = ""
     for (orderLine <- purchaseOrder.orderLine) {
       text += orderLine.productID + ": " + orderLine.quantity + " | "
@@ -137,17 +141,17 @@ object PurchaseOrder{
   }
 
   //return an array holding all purchase orders which have a received status
-  def returnAllReceivedOrders(purchaseOrder: Array[PurchaseOrder]): Array[PurchaseOrder] ={
+  def returnAllReceivedOrders(purchaseOrder: Array[PurchaseOrder]): Array[PurchaseOrder] = {
     var receivedOrders: Array[PurchaseOrder] = Array.empty
-    def findReceived(orders: Array[PurchaseOrder]): Array[PurchaseOrder] ={
-      if(orders.isEmpty){
+    def findReceived(orders: Array[PurchaseOrder]): Array[PurchaseOrder] = {
+      if (orders.isEmpty) {
         orders
       }
-      else if(orders.head.orderStatus == "Received"){
+      else if (orders.head.orderStatus == "Received") {
         receivedOrders = receivedOrders :+ orders.head
         findReceived(orders.tail)
       }
-      else{
+      else {
         findReceived(orders.tail)
       }
     }
@@ -156,9 +160,9 @@ object PurchaseOrder{
   }
 
   //print all the details of all purchase orders
-  def printAllDetails(purchaseOrder: Array[PurchaseOrder]): Array[String] ={
+  def printAllDetails(purchaseOrder: Array[PurchaseOrder]): Array[String] = {
     var text: Array[String] = Array.empty
-    for(order <- purchaseOrder) {
+    for (order <- purchaseOrder) {
       text = text :+ order.orderID + "  |  " + order.orderStatus + "  |  " + order.orderDate + "  |  " + order.supplierName + "  |  " + printAllOrderLines(order)
     }
     text

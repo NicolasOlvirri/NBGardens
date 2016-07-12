@@ -18,9 +18,9 @@ object Staff{
     var isAccountsMem = false
 
     def findStaff(staffArray: Array[Staff]): Boolean ={
-      if(staffArray.isEmpty){}
-
-      if (staffID == staffArray.head.staffID){
+      if(staffArray.isEmpty){
+        isAccountsMem
+      } else if (staffID == staffArray.head.staffID){
         if(staffArray.head.staffRole == "Accounts"){
           isAccountsMem = true
           isAccountsMem
