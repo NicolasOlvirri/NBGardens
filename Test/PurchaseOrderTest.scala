@@ -9,10 +9,6 @@ class PurchaseOrderTest extends FlatSpec with Matchers {
     PurchaseOrder.readInPurchases().isEmpty shouldEqual false
   }
 
-  //PurchaseOrder.orderReceived()
-  //when a purchase order is received, update the status of the purchase order to received
-  // and increment stock levels with new stock
-
   //search for a single purchase order form given an ID
   it should "find a purchase order given a correct ID" taggedAs FindSinglePurchaseOrderSuccess in {
     PurchaseOrder.searchSingleOrder(PurchaseOrder.readInPurchases(), "12347").orderID shouldEqual "12347"
@@ -32,12 +28,9 @@ class PurchaseOrderTest extends FlatSpec with Matchers {
   it should "fail to return the details of a purchase order given invalid ID" taggedAs PrintSinglePurchaseOrderFailure in {
     PurchaseOrder.printSinglePurchaseOrder(PurchaseOrder.readInPurchases(), "dsafdsf") shouldBe "ERROR"
   }
-
-  
 }
 
 object ReadInPurchasesSuccess extends Tag("ReadInPurchasesSuccess")
-
 object FindSinglePurchaseOrderSuccess extends Tag("FindSinglePurchaseOrderSuccess")
 object FindSinglePurchaseOrderFailure extends Tag("FindSinglePurchaseOrderFailure")
 object PrintSinglePurchaseOrderSuccess extends Tag("PrintSinglePurchaseOrderSuccess")
