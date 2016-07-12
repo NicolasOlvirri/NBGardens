@@ -64,7 +64,7 @@ object Main{
           println("Enter your staff ID: ")
           val staffID = Menu.userInput()
           //check if staff is part of Accounts
-          if(Staff.returnRole(staffID)){
+          if(Staff.isAccountsMember(staffID)){
             Order.printDispatchedOrders(orders)
           }
           else println("This staff member is not a part of Accounts\n")
@@ -85,7 +85,7 @@ object Main{
           println("Enter your staff ID: ")
           val staffID = Menu.userInput()
           //check if staff is part of Accounts
-          if(Staff.returnRole(staffID)){
+          if(Staff.isAccountsMember(staffID)){
             PurchaseOrder.printAllDetails(PurchaseOrder.returnAllReceivedOrders(purchaseOrders))
           }
           else println("This staff member is not a part of Accounts\n")

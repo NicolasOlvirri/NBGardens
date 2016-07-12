@@ -14,7 +14,7 @@ object Staff{
   )
 
   //given the ID of a staff member, return true if the member is part of accounts
-  def returnRole(staffID: String): Boolean ={
+  def isAccountsMember(staffID: String): Boolean ={
     var isAccountsMem = false
 
     def findStaff(staffArray: Array[Staff]): Boolean ={
@@ -31,6 +31,23 @@ object Staff{
       }
       else{
         findStaff(staffArray.tail)
+      }
+    }
+    findStaff(staff)
+  }
+
+  def findStaffMember(staffID: String): Boolean ={
+    var isMember: Boolean = false
+    def findStaff(staffMembers: Array[Staff]): Boolean ={
+      if(staffMembers.isEmpty){
+        isMember
+      }
+      else if(staffID == staffMembers.head.staffID){
+        isMember = true
+        isMember
+      }
+      else{
+        findStaff(staffMembers.tail)
       }
     }
     findStaff(staff)
