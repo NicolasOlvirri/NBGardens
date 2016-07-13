@@ -32,7 +32,7 @@ object Order {
       val products = orderInformation(7).split('|').map(_.trim)
 
       //separate the orderlines, which is the product ID and quantity for each item ordered by the customer
-      for (productIDAndQuantity <- products){
+      for (productIDAndQuantity <- products) {
         val orderDetails = productIDAndQuantity.split(':').map(_.trim)
         orderLine = orderLine :+ new OrderLine(orderDetails(0), orderDetails(1).toInt)
       }
@@ -45,7 +45,7 @@ object Order {
   }
 
   //print all the orderlines in an order (prints all products ordered by customer)
-  def printAllOrderLines(order: Order): Unit ={
+  def printAllOrderLines(order: Order): Unit = {
     for (orderLine <- order.orderLine) {
       print(orderLine.productID + ": " + orderLine.quantity + " | ")
     }
@@ -53,8 +53,8 @@ object Order {
   }
 
   //print all the details of all customer orders
-  def printAllDetails(orders: Array[Order]): Unit ={
-    for(order <- orders) {
+  def printAllDetails(orders: Array[Order]): Unit = {
+    for (order <- orders) {
       println("Order Status  |  Order ID  |  Staff ID  |  Customer Name  |  Order Date  |  Address  |  Payment Method")
       println(order.orderStatus + "  |  " + order.orderID + "  |  " + order.staffID + "  |  " + order.customerName + "  |  " + order.orderDate + "  |  " + order.address + "  |  " + order.paymentMethod)
       println("Product ID : Quantity")
@@ -65,13 +65,13 @@ object Order {
 
 
   //print details of a given customer order ID
-  def printSingleOrder(orderID: String, orders: Array[Order]): Unit ={
+  def printSingleOrder(orderID: String, orders: Array[Order]): Unit = {
 
-    def findOrder(orderID: String, arrayOfOrders: Array[Order]): Unit ={
-      if(arrayOfOrders.isEmpty){
+    def findOrder(orderID: String, arrayOfOrders: Array[Order]): Unit = {
+      if (arrayOfOrders.isEmpty) {
         println(s"Could not find order with given order ID: $orderID")
       }
-      else if(orderID == arrayOfOrders.head.orderID){
+      else if (orderID == arrayOfOrders.head.orderID) {
         println("Order Status  |  Order ID  |  Staff ID  |  Customer Name  |  Order Date  |  Payment Method")
         println(arrayOfOrders.head.orderStatus + "  |  " + arrayOfOrders.head.orderID + "  |  " + arrayOfOrders.head.staffID + "  |  " +
           arrayOfOrders.head.customerName + "  |  " + arrayOfOrders.head.orderDate + " | " + arrayOfOrders.head.address + "  |  " + arrayOfOrders.head.paymentMethod)
@@ -87,14 +87,14 @@ object Order {
   }
 
   //search for an order given an ID and return it
-  def returnSingleOrder(orderID: String, orders: Array[Order]): Order ={
-    def findOrder(orderID: String, orders: Array[Order]): Order ={
-      if(orders.isEmpty){
+  def returnSingleOrder(orderID: String, orders: Array[Order]): Order = {
+    def findOrder(orderID: String, orders: Array[Order]): Order = {
+      if (orders.isEmpty) {
         println(s"Could not find order with ID: $orderID")
         null
       }
-      else{
-        if(orderID == orders.head.orderID)
+      else {
+        if (orderID == orders.head.orderID)
           orders.head
         else
           findOrder(orderID, orders.tail)
@@ -139,7 +139,7 @@ object Order {
             //enter the staff members ID who will be working on this customer order
             println("Enter your staff ID: ")
             val staffID = Menu.userInput()
-            if(Staff.findStaffMember(staffID)) {
+            if (Staff.findStaffMember(staffID)) {
               for (item <- orderSearchedFor.orderLine) {
                 //update the stock quantity for the given customer orders products
                 Product.writeToCSV(Product.updateStockQuantity(Main.products, item.productID, item.quantity, false))
@@ -192,25 +192,29 @@ object Order {
     }
   }
 
-  def updateStatus(orderArray: Array[Order], orderID: String, newStatus: String): Array[Order] = {
-    if (orderArray.isEmpty) {
-      orderArray
+  def updateStatus(orderArray1: Array[Order], orderID1: String, newStatus1: String): Array[Order] = {
+    var newOrders:Array[Order] = Array.empty
+    def update(orderArray: Array[Order], orderID: String, newStatus: String): Array[Order] = {
+      if (orderArray.isEmpty) {
+        newOrders
+      }
+      else if (orderArray.head.orderID == orderID) {
+        //theres an error here, This is the recursive function Yuan split up, so the recursive functionality does not work as well
+        //it writes to the CSV once the order status is changed for some reason
+        //check orderTest file
+        updateStatus(orderArray.tail, orderID, newStatus) :+ orderArray.head.copy(orderStatus = newStatus)
+      }
+      else {
+        updateStatus(orderArray.tail, orderID, newStatus) :+ orderArray.head
+      }
     }
-    else if (orderArray.head.orderID == orderID) {
-      //theres an error here, This is the recursive function Yuan split up, so the recursive functionality does not work as well
-      //it writes to the CSV once the order status is changed for some reason
-      //check orderTest file
-      val newOrders: Array[Order] = updateStatus(orderArray.tail, orderID, newStatus) :+ orderArray.head.copy(orderStatus = newStatus)
-      writeToCSV(newOrders)
-      newOrders
-    }
-    else {
-      updateStatus(orderArray.tail, orderID, newStatus) :+ orderArray.head
-    }
+    newOrders = update(orderArray1, orderID1, newStatus1)
+    writeToCSV(newOrders)
+    newOrders
   }
 
   //assign a staff member to an order
-  def assignStaffToOrder(orders: Array[Order], orderID: String, newStaffID: String): Array[Order] ={
+  def assignStaffToOrder(orders: Array[Order], orderID: String, newStaffID: String): Array[Order] = {
     var newOrderArray: Array[Order] = Array.empty
 
     def updateStaffID(orderArray: Array[Order], newStatus: String): Array[Order] = {
@@ -218,7 +222,7 @@ object Order {
         orderArray
       }
       else if (orderArray.head.orderID == orderID) {
-        if(Staff.findStaffMember(newStaffID)) //made some error checking to make sure the staff member ID is valid in "database"
+        if (Staff.findStaffMember(newStaffID)) //made some error checking to make sure the staff member ID is valid in "database"
           updateStaffID(orderArray.tail, newStatus) :+ orderArray.head.copy(staffID = newStaffID)
         else
           orderArray
@@ -232,10 +236,10 @@ object Order {
   }
 
   //rewrite CSV with given changes
-  def writeToCSV(orders: Array[Order]): Unit ={
-    def writeOrderLineToCSV(order: Order): String ={
+  def writeToCSV(orders: Array[Order]): Unit = {
+    def writeOrderLineToCSV(order: Order): String = {
       var orderLineText: String = ""
-      for(orderLine <- order.orderLine) {
+      for (orderLine <- order.orderLine) {
         orderLineText = orderLine.productID + ": " + orderLine.quantity + " | "
       }
       orderLineText
@@ -243,18 +247,18 @@ object Order {
     val file = new File(fileName)
     val writer = new BufferedWriter(new FileWriter(file))
     var text = ""
-    for(item <- orders){
-      text = item.orderStatus + ", " + item.orderID + ", " + item.staffID + ", " + item.customerName + ", " + item.orderDate + ", " + item.address + ", " + item.paymentMethod + ", " + writeOrderLineToCSV(item) +"\n"
+    for (item <- orders) {
+      text = item.orderStatus + ", " + item.orderID + ", " + item.staffID + ", " + item.customerName + ", " + item.orderDate + ", " + item.address + ", " + item.paymentMethod + ", " + writeOrderLineToCSV(item) + "\n"
       writer.write(text)
     }
     writer.close()
   }
 
   //print all orders which have been set to dispatched
-  def printDispatchedOrders(orders: Array[Order]): Array[Order] ={
+  def printDispatchedOrders(orders: Array[Order]): Array[Order] = {
     var dispatchedOrders: Array[Order] = Array.empty
-    for(status <- orders){
-      if(status.orderStatus == "Dispatched"){
+    for (status <- orders) {
+      if (status.orderStatus == "Dispatched") {
         dispatchedOrders = dispatchedOrders :+ status
       }
     }
