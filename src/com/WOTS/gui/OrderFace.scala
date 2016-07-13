@@ -138,7 +138,7 @@ case class OrderFace() extends Scene {
       val result = dialog.showAndWait()
       result match {
         case Some(id) =>
-          if(Staff.returnRole(id)){
+          if(Staff.isAccountsMember(id)){
             val orders: Array[Order] = Order.readInOrders()
             val ordersDP: Array[Order]= Order.printDispatchedOrders(orders)
             getOrderData.getOrderData(ordersDP)

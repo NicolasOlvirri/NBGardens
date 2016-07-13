@@ -139,19 +139,22 @@ object Order {
             //enter the staff members ID who will be working on this customer order
             println("Enter your staff ID: ")
             val staffID = Menu.userInput()
+            if(Staff.findStaffMember(staffID)) {
+              for (item <- orderSearchedFor.orderLine) {
+                //update the stock quantity for the given customer orders products
+                Product.writeToCSV(Product.updateStockQuantity(Main.products, item.productID, item.quantity, false))
+              }
 
-            for(item <- orderSearchedFor.orderLine) {
-              //update the stock quantity for the given customer orders products
-              Product.writeToCSV(Product.updateStockQuantity(Main.products, item.productID, item.quantity, false))
+              //update the status
+              newOrders = updateStatus(orders, orderID, "Active")
+              //update the staff member to the given members ID
+              newOrders = assignStaffToOrder(newOrders, orderID, staffID)
+              //rewrite the changes to the CSV
+              writeToCSV(newOrders)
+              newOrders
             }
-
-            //update the status
-            newOrders = updateStatus(orders, orderID, "Active")
-            //update the staff member to the given members ID
-            newOrders = assignStaffToOrder(newOrders, orderID, staffID)
-            //rewrite the changes to the CSV
-            writeToCSV(newOrders)
-            newOrders
+            else
+              orders
           }
 
         case "p" | "packaged" =>
@@ -194,6 +197,9 @@ object Order {
       orderArray
     }
     else if (orderArray.head.orderID == orderID) {
+      //theres an error here, This is the recursive function Yuan split up, so the recursive functionality does not work as well
+      //it writes to the CSV once the order status is changed for some reason
+      //check orderTest file
       val newOrders: Array[Order] = updateStatus(orderArray.tail, orderID, newStatus) :+ orderArray.head.copy(orderStatus = newStatus)
       writeToCSV(newOrders)
       newOrders
@@ -212,7 +218,10 @@ object Order {
         orderArray
       }
       else if (orderArray.head.orderID == orderID) {
-        updateStaffID(orderArray.tail, newStatus) :+ orderArray.head.copy(staffID = newStaffID)
+        if(Staff.findStaffMember(newStaffID)) //made some error checking to make sure the staff member ID is valid in "database"
+          updateStaffID(orderArray.tail, newStatus) :+ orderArray.head.copy(staffID = newStaffID)
+        else
+          orderArray
       }
       else {
         updateStaffID(orderArray.tail, newStatus) :+ orderArray.head
