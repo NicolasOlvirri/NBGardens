@@ -29,10 +29,10 @@ class OrderTest extends FlatSpec with Matchers {
   }
 
   //For some reason when running this test, the CSV is rewritten with one of the orders missing.
-//  it should "update an orders status" taggedAs UpdateOrderStatusSuccess in {
-//    val newOrders = Order.updateStatus(Order.readInOrders(), "4141351", "Active")
-//    Order.returnSingleOrder("4141351", newOrders).orderStatus shouldEqual "Active"
-//  }
+  it should "update an orders status" taggedAs UpdateOrderStatusSuccess in {
+    val newOrders = Order.updateStatus(Order.readInOrders(), "4141351", "Active")
+    Order.returnSingleOrder("4141351", newOrders).orderStatus shouldEqual "Active"
+  }
 
   it should "print orders with status as dispatched only" taggedAs PrintDispatchedOrdersSuccess in {
     val dispatchedOrders = Order.printDispatchedOrders(Order.readInOrders())
@@ -48,5 +48,5 @@ object ReturnSingleOrderSuccess extends Tag("ReturnSingleOrderSuccess")
 object ReturnSingleOrderFail extends Tag("ReturnSingleOrderFail")
 object AssignStaffToOrderSuccess extends Tag("AssignStaffToOrderSuccess")
 object AssignStaffToOrderFail extends Tag("AssignStaffToOrderFail")
-//object UpdateOrderStatusSuccess extends Tag("UpdateOrderStatusSuccess")
+object UpdateOrderStatusSuccess extends Tag("UpdateOrderStatusSuccess")
 object PrintDispatchedOrdersSuccess extends Tag("PrintDispatchedOrdersSuccess")
