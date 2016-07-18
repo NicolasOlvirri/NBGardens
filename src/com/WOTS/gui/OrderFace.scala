@@ -11,6 +11,7 @@ import scalafx.scene.Scene
 import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.control._
 import scalafx.scene.layout.HBox
+import scalafx.scene.text.{Font, FontWeight}
 
 /**
   * Created by Yuan on 01/07/2016.
@@ -23,7 +24,9 @@ case class OrderFace() extends Scene {
   val menuButton = new gui.MenuButton()
   val menu = menuButton.menu
 
-  val check = new Button("Check") //a button
+  val check = new Button("Check") {
+    font = Font.font(null, FontWeight.Bold, 16)
+  }//a button
   check.prefWidth = 140
   check.prefHeight = 50
   check.onAction = (e: ActionEvent) => {
@@ -31,7 +34,9 @@ case class OrderFace() extends Scene {
     getOrderData.getOrderData(orders)
   }
 
-  val update = new Button("Update") //a button
+  val update = new Button("Update") {
+    font = Font.font(null, FontWeight.Bold, 16)
+  }//a button
   update.prefWidth = 140
   update.prefHeight = 50
   update.onAction = (e: ActionEvent) => {
@@ -71,19 +76,29 @@ case class OrderFace() extends Scene {
     }
   }
 
-  val choose1 = new RadioButton("Open")
+  val choose1 = new RadioButton("Open") {
+    font = Font.font(null, FontWeight.Bold, 14)
+  }
   choose1.setUserData("Open")
-  val choose2 = new RadioButton("Active")
+  val choose2 = new RadioButton("Active") {
+    font = Font.font(null, FontWeight.Bold, 14)
+  }
   choose2.setUserData("Active")
-  val choose3 = new RadioButton("Packaged")
+  val choose3 = new RadioButton("Packaged") {
+    font = Font.font(null, FontWeight.Bold, 14)
+  }
   choose3.setUserData("Packaged")
-  val choose4 = new RadioButton("Dispatched")
+  val choose4 = new RadioButton("Dispatched") {
+    font = Font.font(null, FontWeight.Bold, 14)
+  }
   choose4.setUserData("Dispatched")
 
   val toggle = new ToggleGroup()
   toggle.toggles = List (choose1,choose2,choose3,choose4)
 
-  val text = new TextArea() {promptText = "ID"}//a button
+  val text = new TextArea() {
+    promptText = "ID"
+  }//a button
   text.maxWidth = 140
   text.maxHeight = 20
 
