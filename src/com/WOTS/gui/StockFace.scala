@@ -80,6 +80,11 @@ case class StockFace() extends Scene{
 
   var table = tableS.table
 
+  table.selectionModel.apply.selectedItem.onChange(
+    text.text = table.selectionModel.apply().getSelectedItems.get(0).productID.toString
+  )
+
+
   val sph = new SplitPane(){
     autosize()
     items.addAll(textBox,table)
