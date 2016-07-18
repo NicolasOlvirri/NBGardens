@@ -94,6 +94,10 @@ case class OrderFace() extends Scene {
 
   var table = tableO.table
 
+  table.selectionModel.apply.selectedItem.onChange(
+    text.text = table.selectionModel.apply().getSelectedItems.get(0).orderID.toString
+  )
+
   val sph = new SplitPane(){
     autosize()
     items.addAll(textBox,table)
