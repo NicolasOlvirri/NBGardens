@@ -9,6 +9,7 @@ import scalafx.scene.Scene
 import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.control._
 import scalafx.scene.layout.HBox
+import scalafx.scene.text.{Font, FontWeight}
 
 /**
   * Created by Yuan on 07/07/2016.
@@ -21,7 +22,9 @@ case class AddNewStockFace() extends Scene{
   val menuButton = new MenuButton()
   val menu = menuButton.menu
 
-  val Add = new Button("Add") //a button
+  val Add = new Button("Add")  {
+    font = Font.font(null, FontWeight.Bold, 16)
+  }//a button
   Add.minWidth = 90
   Add.minHeight = 100
   Add.onAction = (e: ActionEvent) => {

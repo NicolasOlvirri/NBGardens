@@ -11,7 +11,7 @@ import scalafx.scene.text.{Font, FontWeight}
   * Created by Yuan on 07/07/2016.
   */
 class MenuButton {
-  val PrintOrder = new Button("Print order details")  {
+  val PrintOrder = new Button("Print order details") {
     font = Font.font(null, FontWeight.Bold, 16)
   }//a button
   PrintOrder.maxWidth = 220

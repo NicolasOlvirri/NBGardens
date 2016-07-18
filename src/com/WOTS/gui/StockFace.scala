@@ -11,6 +11,7 @@ import scalafx.scene.Scene
 import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.control._
 import scalafx.scene.layout.HBox
+import scalafx.scene.text.{Font, FontWeight}
 /**
   * Created by Yuan on 06/07/2016.
   */
@@ -22,7 +23,9 @@ case class StockFace() extends Scene{
   val menuButton = new gui.MenuButton()
   val menu = menuButton.menu
 
-  val Set = new Button("Set") //a button
+  val Set = new Button("Set")  {
+    font = Font.font(null, FontWeight.Bold, 16)
+  }//a button
   Set.minWidth = 90
   Set.minHeight = 90
   Set.onAction = (e: ActionEvent) => {
@@ -50,9 +53,13 @@ case class StockFace() extends Scene{
     }
   }
 
-  val choose5 = new RadioButton("Increment Stock By")
+  val choose5 = new RadioButton("Increment Stock By") {
+    font = Font.font(null, FontWeight.Bold, 16)
+  }
   choose5.setUserData("Increment")
-  val choose6 = new RadioButton("Decrement Stock")
+  val choose6 = new RadioButton("Decrement Stock") {
+    font = Font.font(null, FontWeight.Bold, 16)
+  }
   choose6.setUserData("Decrement")
 
   val toggleForP = new ToggleGroup()
